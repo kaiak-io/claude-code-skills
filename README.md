@@ -61,6 +61,7 @@ Skills are portable. Create once, use across Claude Code, GitHub Copilot, and Op
 - [LinkedIn Post Generator](skills/content-creation/linkedin-post-generator/) - Creates authentic LinkedIn posts in a practitioner-sharing style. Includes anti-engagement-bait filter, platform specs (character limits, algorithm signals, optimal posting times), and five post type templates with examples.
 - [Content Research Writer](skills/content-creation/content-research-writer/) - Research partner for content creation. Handles tactical setup, pre-mortem strategy checks, outline frameworks, inline citation standards, source quality evaluation, and verification workflows.
 - [Content Voice & Style](skills/content-creation/content-voice-style/) - Writing quality guard that enforces anti-AI-slop filtering (50+ banned phrases), voice preservation, personal narrative integration, bold-first formatting, and pattern staleness detection.
+- [Content Orchestrator](skills/content-creation/content-orchestrator/) - Coordinates the full content pipeline from research through publication and distribution. Delegates to the other content skills — the conductor that runs the full RESEARCH → PLAN → DRAFT → REVIEW → PUBLISH → DISTRIBUTE workflow.
 
 ### Research
 
@@ -70,15 +71,15 @@ Skills are portable. Create once, use across Claude Code, GitHub Copilot, and Op
 
 - [MDX Web Publishing](skills/web-publishing/mdx-web-publishing/) - Formatting and publishing for MDX-based blogs. Content type templates (evergreen and pillar posts), JSX component patterns, visual cadence rules, SEO/GEO optimization (including AI citability), and a repurposing protocol for LinkedIn carousels and newsletters.
 
-### Development
-
-*Coming soon. [Contribute a skill &rarr;](CONTRIBUTING.md)*
-
 ### Education
 
-*Coming soon. [Contribute a skill &rarr;](CONTRIBUTING.md)*
+- [Meeting Prep & Notes](skills/education/meeting-prep/) - Generates structured meeting agendas with time boxes and purpose tags (DECIDE, DISCUSS, INFORM, SOLVE, REVIEW). Converts rough notes into formatted minutes with decisions and action items. Templates for staff meetings, leadership teams, parent conferences, PLCs, and board presentations.
 
 ### Productivity
+
+- [SOP Generator](skills/productivity/sop-generator/) - Turns process descriptions, rough notes, or verbal walkthroughs into structured Standard Operating Procedures. Supports both human-readable SOPs and AI Agent SOPs (the format used by AWS Strands). Includes education-specific templates for incident response, enrollment, and publishing workflows.
+
+### Development
 
 *Coming soon. [Contribute a skill &rarr;](CONTRIBUTING.md)*
 
