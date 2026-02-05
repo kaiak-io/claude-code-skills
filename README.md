@@ -65,7 +65,7 @@ Skills are portable. Create once, use across Claude Code, GitHub Copilot, and Op
 
 ### Research
 
-- [Automated Research Pipeline](skills/research/automated-research/) - Builds a search-download-summarize-digest pipeline across academic and web sources. Configurable per-topic scheduling (daily to biweekly), structured summaries, and cross-topic rollups. Supports arXiv, Google Scholar, web search, and RSS.
+- [Automated Research Pipeline](skills/research/automated-research/) - Builds a search-download-summarize-digest-deliver pipeline across academic and web sources. Configurable per-topic scheduling (daily to biweekly), structured summaries, cross-topic rollups, email delivery, Google Drive sync, and NotebookLM integration for audio overviews and cross-source Q&A.
 
 ### Web Publishing
 

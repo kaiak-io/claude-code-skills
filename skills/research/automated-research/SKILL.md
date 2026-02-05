@@ -1,6 +1,6 @@
 ---
 name: automated-research
-description: Builds and manages an automated research pipeline that searches academic and web sources on configured topics, summarizes new content, and delivers research digests. Use when setting up research automation, configuring search topics, creating search or summarization scripts, or generating research digests.
+description: Builds and manages an automated research pipeline that searches academic and web sources on configured topics, summarizes new content, and delivers research digests via email, Google Drive, and NotebookLM. Use when setting up research automation, configuring search topics, creating search or summarization scripts, generating research digests, or setting up delivery integrations.
 ---
 
 # Automated Research Pipeline
@@ -9,12 +9,13 @@ Builds a fully automated system: search for new content, download what's accessi
 
 ## Core Design
 
-**Search → Download → Summarize → Digest**
+**Search → Download → Summarize → Digest → Deliver**
 
 1. **Search** — Query configured sources (arXiv, web, Google Scholar, RSS) for new content matching your keywords.
 2. **Download** — Auto-fetch all freely accessible content (web articles, arXiv abstracts, RSS entries). Save to `sources/` as markdown. Log anything behind paywalls or auth walls for manual retrieval.
 3. **Summarize** — Generate structured summaries for all new downloads via Claude. Save to `notes/`.
 4. **Digest** — Compile digest on the topic's configured frequency with candidates, download status, key statistics, and emerging themes.
+5. **Deliver** — Push digests to email, sync sources and summaries to Google Drive, and feed into NotebookLM for audio overviews and cross-source Q&A.
 
 The pipeline downloads everything it can access. Paywalled or restricted content is flagged in the digest for you to retrieve manually.
 
@@ -144,7 +145,18 @@ Check for new downloads in my research topics and generate summaries.
 Generate this week's research summary across all topics.
 ```
 
+**Set up email delivery:**
+```
+Set up email delivery for my research digests using Gmail.
+```
+
+**Set up Google Drive sync:**
+```
+Set up Google Drive sync for my research pipeline so NotebookLM can access the sources.
+```
+
 ## References
 
 - [pipeline-architecture.md](references/pipeline-architecture.md) — Script logic, scheduling, error handling, digest templates
 - [search-sources.md](references/search-sources.md) — Source-specific APIs, configuration, rate limits
+- [delivery-integrations.md](references/delivery-integrations.md) — Email delivery, Google Drive sync, NotebookLM integration
