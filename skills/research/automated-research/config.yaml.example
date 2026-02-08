@@ -1,0 +1,87 @@
+# Research Pipeline Configuration
+# Copy this file to config.yaml and customize for your needs.
+
+settings:
+  # Model for generating summaries (uses Claude CLI)
+  summary_model: claude-sonnet
+
+  # Default digest format
+  digest_format: markdown
+
+  # Where to save digests
+  digest_location: ./digests
+
+  # Day to generate weekly rollups (lowercase)
+  rollup_day: sunday
+
+  # Delivery configuration (optional)
+  delivery:
+    email:
+      enabled: false
+      provider: gmail          # gmail, resend, or sendgrid
+      recipient: "you@example.com"
+      # from_email: "research@yourdomain.com"  # Required for resend/sendgrid
+      send_on: digest          # digest = after each topic, rollup = weekly only
+
+    drive:
+      enabled: false
+      method: rclone           # Only rclone supported currently
+      remote_name: gdrive      # Your rclone remote name
+      remote_path: "Research"  # Folder in Google Drive
+
+    notebooklm:
+      enabled: false           # Flag only - setup is manual in NotebookLM
+      drive_path: "Research"   # Confirms path for NotebookLM to source from
+
+
+# Research topics - add as many as you need
+topics:
+  # Example: AI in Education research
+  ai-in-education:
+    frequency: weekly          # daily, every_2_days, every_3_days, weekly, biweekly
+    keywords:
+      - "artificial intelligence education"
+      - "AI classroom"
+      - "machine learning teaching"
+      - "educational technology AI"
+    sources:
+      - arxiv                  # Free, no API key needed
+      - rss                    # Free, no API key needed
+      # - web                  # Requires BRAVE_SEARCH_KEY
+    rss_feeds:
+      - "https://example.com/education-tech-feed.xml"
+    summary_focus: "practical applications for K-12 education"
+
+  # Example: Leadership research
+  leadership:
+    frequency: biweekly
+    keywords:
+      - "educational leadership"
+      - "school administration"
+      - "organizational management education"
+    sources:
+      - arxiv
+      - web
+    summary_focus: "actionable frameworks for school leaders"
+
+  # Example: Systems thinking
+  systems-thinking:
+    frequency: weekly
+    keywords:
+      - "systems thinking organization"
+      - "organizational design"
+      - "process improvement education"
+    sources:
+      - arxiv
+      - rss
+    rss_feeds:
+      - "https://example.com/systems-feed.xml"
+    summary_focus: "systemic approaches to organizational challenges"
+
+
+# Notes:
+# - Keywords are combined with OR for broader searches
+# - arXiv is always free and doesn't require an API key
+# - For web search, set BRAVE_SEARCH_KEY in your .env file
+# - RSS feeds should point to valid feed URLs
+# - summary_focus guides Claude's summarization priorities

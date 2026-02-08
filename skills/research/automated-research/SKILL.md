@@ -5,7 +5,7 @@ description: Builds and manages an automated research pipeline that searches aca
 
 # Automated Research Pipeline
 
-Builds a fully automated system: search for new content, download what's accessible, summarize everything, and deliver a digest.
+A complete automated research system with working Python scripts. Searches academic and web sources, downloads accessible content, generates AI summaries with Claude, and delivers digests via email or Google Drive.
 
 ## Core Design
 
@@ -24,17 +24,21 @@ The pipeline downloads everything it can access. Paywalled or restricted content
 ```
 research/
 ├── config.yaml                 # Topics, keywords, sources, schedule
+├── .env                        # API keys (gitignored)
 ├── scripts/
-│   ├── search.py               # Queries sources for new content
-│   ├── summarize.py            # Generates summaries of downloads
+│   ├── search.py               # Queries sources, downloads content
+│   ├── summarize.py            # Generates summaries with Claude
+│   ├── deliver.py              # Email and Google Drive delivery
 │   └── utils.py                # Shared: dedup, logging, file handling
 ├── topics/
 │   └── {topic-name}/
 │       ├── sources/
 │       │   └── {YYYY-MM-DD}/   # Downloads organized by date fetched
-│       ├── notes/              # Generated summaries (flat, accumulate over time)
-│       └── candidates.md       # All search results with download status
+│       ├── notes/              # Generated summaries
+│       ├── candidates.md       # All search results with download status
+│       └── .seen_urls          # Deduplication tracker
 ├── digests/                    # Digests generated per topic frequency
+│   └── rollups/                # Weekly cross-topic rollups
 └── logs/
 ```
 
@@ -105,18 +109,29 @@ Each summary follows this structure:
 
 Summaries focus on what the user specified in `summary_focus`. Default emphasis: methodology and effect sizes, not just conclusions.
 
-## Building the Pipeline
+## Getting Started
 
-When setting up a new pipeline:
+Working scripts are included in `scripts/`. To set up:
 
-1. Ask the user for: topics, keywords per topic, which sources to search, and where to put the research folder
-2. Create the folder structure
-3. Generate `config.yaml` from their inputs
-4. Write `search.py`, `summarize.py`, and `utils.py`
-5. Set up scheduling (Windows Task Scheduler or cron)
-6. Run a test search to verify everything works
+1. Copy `config.yaml.example` to `config.yaml`
+2. Edit with your topics, keywords, and sources
+3. Copy `.env.example` to `.env` and add any API keys needed
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run `python scripts/search.py` to test
 
-When adding a topic: update `config.yaml`, create the topic folder, run a test search.
+See [README.md](README.md) for full setup instructions.
+
+## Building a New Pipeline
+
+When setting up a pipeline for a user:
+
+1. Ask for: topics, keywords per topic, which sources to search, delivery preferences
+2. Copy the skill folder to their desired location
+3. Customize `config.yaml` with their inputs
+4. Set up scheduling (Windows Task Scheduler or cron)
+5. Run a test search to verify everything works
+
+When adding a topic: update `config.yaml`, run a test search.
 
 ## Quick Commands
 
