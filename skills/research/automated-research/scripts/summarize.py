@@ -72,11 +72,14 @@ CONTENT:
 
     try:
         # Use Claude CLI for summarization
+        # Pipe prompt via stdin to avoid Windows command line length limits
         result = subprocess.run(
-            ["claude", "--print", "-p", prompt],
+            ["claude", "--print"],
+            input=prompt,
             capture_output=True,
             text=True,
-            timeout=120
+            timeout=120,
+            shell=True
         )
 
         if result.returncode == 0:
