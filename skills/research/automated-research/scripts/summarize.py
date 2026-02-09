@@ -7,8 +7,14 @@ Generates summaries for downloaded content using Claude.
 import os
 import sys
 import subprocess
+import unicodedata
 from datetime import datetime, date, timedelta
 from pathlib import Path
+
+# Fix Windows console encoding
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 # Add scripts dir to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -16,6 +22,56 @@ from utils import (
     load_config, log, setup_logging, extract_text,
     get_topics_dir, get_digests_dir, sanitize_filename
 )
+
+
+def normalize_text(text: str) -> str:
+    """Normalize Unicode text to ASCII-safe characters for Windows compatibility."""
+    # Common Unicode replacements
+    replacements = {
+        '\u2019': "'",      # Right single quote
+        '\u2018': "'",      # Left single quote
+        '\u201c': '"',      # Left double quote
+        '\u201d': '"',      # Right double quote
+        '\u2014': '-',      # Em dash
+        '\u2013': '-',      # En dash
+        '\u2212': '-',      # Minus sign
+        '\u2192': '->',     # Right arrow
+        '\u2190': '<-',     # Left arrow
+        '\u2217': '*',      # Asterisk operator
+        '\u2022': '-',      # Bullet
+        '\u2026': '...',    # Ellipsis
+        '\ufeff': '',       # BOM
+        '\ufb01': 'fi',     # fi ligature
+        '\ufb02': 'fl',     # fl ligature
+        '\u2265': '>=',     # Greater than or equal
+        '\u2264': '<=',     # Less than or equal
+        '\u2260': '!=',     # Not equal
+        '\u03c0': 'pi',     # Pi
+        '\u03b1': 'alpha',  # Alpha
+        '\u03b2': 'beta',   # Beta
+        '\u0393': 'Gamma',  # Gamma
+        '\u2208': 'in',     # Element of
+        '\u2209': 'not in', # Not element of
+        '\u221e': 'inf',    # Infinity
+        '\u223c': '~',      # Tilde operator
+        '\u2248': '~=',     # Almost equal
+        '\u22c6': '*',      # Star operator
+        '\u2322': '^',      # Frown
+        '\u0131': 'i',      # Dotless i
+        '\u0101': 'a',      # a with macron
+        '\u014d': 'o',      # o with macron
+        '\u03f5': 'epsilon', # Epsilon
+    }
+
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    # Normalize remaining Unicode to closest ASCII equivalent
+    text = unicodedata.normalize('NFKD', text)
+    # Remove remaining non-ASCII characters
+    text = text.encode('ascii', 'ignore').decode('ascii')
+
+    return text
 
 
 def get_unsummarized_files(topic: str, base_dir: Path) -> list:
@@ -48,6 +104,10 @@ def summarize_with_claude(content: str, topic_config: dict, filename: str) -> st
     """Generate a summary using Claude CLI."""
     summary_focus = topic_config.get("summary_focus", "key findings and practical implications")
 
+    # Normalize content for Windows compatibility
+    clean_content = normalize_text(content[:15000])
+    clean_filename = normalize_text(filename)
+
     prompt = f"""Summarize this document for a research digest.
 
 Focus on: {summary_focus}
@@ -63,23 +123,26 @@ Be specific about numbers. Don't hedge on findings the document states clearly.
 If effect sizes are reported, include them. If methodology has limitations
 the authors acknowledge, note them.
 
-Document title: {filename}
+Document title: {clean_filename}
 
 ---
 CONTENT:
-{content[:15000]}
+{clean_content}
 """
 
     try:
         # Use Claude CLI for summarization
         # Pipe prompt via stdin to avoid Windows command line length limits
+        # Use encoding='utf-8' to handle any remaining Unicode
         result = subprocess.run(
             ["claude", "--print"],
             input=prompt,
             capture_output=True,
             text=True,
             timeout=120,
-            shell=True
+            shell=True,
+            encoding='utf-8',
+            errors='replace'
         )
 
         if result.returncode == 0:
@@ -141,12 +204,14 @@ def process_topic(topic: str, topic_config: dict, base_dir: Path) -> int:
     summaries_generated = 0
 
     for source_file in unsummarized:
-        log("summarize", "info", f"Summarizing: {source_file.name}")
+        # Normalize filename for safe logging on Windows
+        safe_name = normalize_text(source_file.name)
+        log("summarize", "info", f"Summarizing: {safe_name}")
 
         # Extract text content
         content = extract_text(source_file)
         if not content or len(content.strip()) < 100:
-            log("summarize", "warning", f"Insufficient content in {source_file.name}, skipping")
+            log("summarize", "warning", f"Insufficient content in {safe_name}, skipping")
             continue
 
         # Generate summary
@@ -157,7 +222,7 @@ def process_topic(topic: str, topic_config: dict, base_dir: Path) -> int:
             log("summarize", "info", f"Summary saved: {summary_file.name}")
             summaries_generated += 1
         else:
-            log("summarize", "warning", f"Failed to summarize {source_file.name}")
+            log("summarize", "warning", f"Failed to summarize {safe_name}")
 
     return summaries_generated
 

@@ -14,18 +14,26 @@ load_dotenv()
 
 # Configure logging
 def setup_logging(log_dir: Path):
-    """Set up logging to file and console."""
+    """Set up logging to file and console with UTF-8 support."""
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / "pipeline.log"
 
+    # Create handlers with UTF-8 encoding
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    stream_handler = logging.StreamHandler()
+
+    # Set format
+    formatter = logging.Formatter(
+        "[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    file_handler.setFormatter(formatter)
+    stream_handler.setFormatter(formatter)
+
+    # Configure root logger
     logging.basicConfig(
         level=logging.INFO,
-        format="[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler()
-        ]
+        handlers=[file_handler, stream_handler]
     )
 
 def log(script: str, level: str, message: str):
