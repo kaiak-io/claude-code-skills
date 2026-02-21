@@ -62,6 +62,7 @@ Skills are portable. Create once, use across Claude Code, GitHub Copilot, and Op
 - [Content Research Writer](skills/content-creation/content-research-writer/) - Research partner for content creation. Handles tactical setup, pre-mortem strategy checks, outline frameworks, inline citation standards, source quality evaluation, and verification workflows.
 - [Content Voice & Style](skills/content-creation/content-voice-style/) - Writing quality guard that enforces anti-AI-slop filtering (50+ banned phrases), voice preservation, personal narrative integration, bold-first formatting, and pattern staleness detection.
 - [Content Orchestrator](skills/content-creation/content-orchestrator/) - Coordinates the full content pipeline from research through publication and distribution. Delegates to the other content skills — the conductor that runs the full RESEARCH → PLAN → DRAFT → REVIEW → PUBLISH → DISTRIBUTE workflow.
+- [Blog Featured Images](skills/content-creation/blog-featured-images/) - Generates branded featured images for blog posts in the "Warm Editorial" style. Brand color system (5-pillar palette with color logic), Poppins typography, flat geometric illustration rules, canvas specs (1200x630px OG standard), master prompt for Claude Desktop generation, and visual concepts for 36+ posts organized by content pillar.
 
 ### Research
 
