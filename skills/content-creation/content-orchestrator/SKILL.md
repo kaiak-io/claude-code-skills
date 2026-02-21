@@ -1,20 +1,21 @@
 ---
 name: content-orchestrator
-description: Coordinates the full content creation pipeline from research through publication and distribution. Knows about and delegates to the other content skills — automated-research, content-research-writer, content-voice-style, mdx-web-publishing, and linkedin-post-generator. Use when planning a content piece end-to-end, running the full pipeline, or checking which step comes next. This is the conductor — the other skills are the instruments.
+description: Coordinates the full content creation pipeline from research through publication and distribution. Knows about and delegates to the other content skills — automated-research, content-research-writer, content-voice-style, blog-featured-images, mdx-web-publishing, and linkedin-post-generator. Use when planning a content piece end-to-end, running the full pipeline, or checking which step comes next. This is the conductor — the other skills are the instruments.
 ---
 
 # Content Orchestrator
 
-Runs the full content pipeline from idea to published post to social distribution. Coordinates five specialist skills.
+Runs the full content pipeline from idea to published post to social distribution. Coordinates six specialist skills.
 
 ## The Pipeline
 
 ```
 RESEARCH → PLAN → DRAFT → REVIEW → PUBLISH → DISTRIBUTE
    ↓         ↓       ↓        ↓         ↓          ↓
-automated  content  content  content    mdx-web   linkedin
--research  -research -voice  -voice    -publishing -post
-           -writer  -style   -style               -generator
+automated  content  content  content  blog-featured linkedin
+-research  -research -voice  -voice   -images +    -post
+           -writer  -style   -style   mdx-web      -generator
+                                      -publishing
 ```
 
 Each stage has a clear input, a clear output, and a handoff to the next stage.
@@ -113,27 +114,31 @@ Deliver: polished draft that passes all quality checks.
 
 ## Stage 5: PUBLISH
 
-**Skill:** `mdx-web-publishing`
+**Skills:** `blog-featured-images` + `mdx-web-publishing`
 **Input:** Polished draft
-**Output:** Published post on the website
+**Output:** Published post with featured image on the website
 
 ### What to do
 
-1. Add MDX frontmatter (title, description, date, pillar, keywords, interlinks)
-2. Apply JSX components (callouts, grids, hero section if applicable)
-3. Enforce visual cadence — visual element every 300-500 words
-4. Run SEO checklist:
+1. Generate the featured image using `blog-featured-images`:
+   - Find the visual concept in `references/visual-concepts.md` or design a new one
+   - Use the master prompt in Claude Desktop with the per-post request format
+   - Save to `public/images/posts/[slug].png`
+2. Add MDX frontmatter (title, description, date, pillar, keywords, interlinks, `image`, `imageAlt`)
+3. Apply JSX components (callouts, grids, hero section if applicable)
+4. Enforce visual cadence — visual element every 300-500 words
+5. Run SEO checklist:
    - Primary keyword in title, first 100 words, 1-2 H2s
    - Meta description: 150-160 chars
    - Clean heading hierarchy
    - Internal links to 2-3 related posts
-5. Run GEO checklist:
+6. Run GEO checklist:
    - Core answer in first 50 words
    - Stats with named sources every 150-200 words
    - Question-based headings
    - FAQ section (pillar posts)
-6. Add references section
-7. Publish
+7. Add references section
+8. Publish
 
 ### Handoff to Stage 6
 Deliver: live URL of published post.
